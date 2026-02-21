@@ -133,8 +133,8 @@ public class EmployeeController {
             return Result.error("员工不存在");
         }
         BeanUtils.copyProperties(employeeDTO, employee);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeService.update(employee);
 
         return Result.success(employee);
