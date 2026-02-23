@@ -55,8 +55,8 @@ public class AutoFillAspect {
         if (operationType == OperationType.INSERT){
             //为四个字段赋值
             try {
-                Method setCreatTime = entity.getClass().getDeclaredMethod("setCreatTime", LocalDateTime.class);
-                Method setCreatTUser = entity.getClass().getDeclaredMethod("setCreatUser", Long.class);
+                Method setCreatTime = entity.getClass().getDeclaredMethod("setCreateTime", LocalDateTime.class);
+                Method setCreatTUser = entity.getClass().getDeclaredMethod("setCreateUser", Long.class);
                 Method setUpdateTime = entity.getClass().getDeclaredMethod("setUpdateTime", LocalDateTime.class);
                 Method setUpdateUser = entity.getClass().getDeclaredMethod("setUpdateUser", Long.class);
                 setCreatTime.invoke(entity,now);
