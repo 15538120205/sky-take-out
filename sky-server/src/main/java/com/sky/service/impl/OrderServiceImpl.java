@@ -17,6 +17,7 @@ import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
         //向订单表插入1条数据
         Orders orders = new Orders();
         BeanUtils.copyProperties(ordersSubmitDTO,orders);
+        orders.setAddress(addressBook.getProvinceName()+addressBook.getCityName()+addressBook.getDistrictName()+addressBook.getDetail());
         orders.setUserId(BaseContext.getCurrentId());
         orders.setOrderTime(LocalDateTime.now());
         orders.setPayStatus(Orders.UN_PAID);
@@ -292,6 +294,27 @@ public class OrderServiceImpl implements OrderService {
         //部分订单状态需要额外返回订单菜品信息.将orders转换为ordervo
         List<OrderVO> orderVOList = getOrderVOList(page);
         return new PageResult(page.getTotal(), orderVOList);
+    }
+    /**
+     * 统计订单数据
+     *
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO statistics() {
+
+        //根据状态,分别查出待接单,待派单,代配送的订单数量
+        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED);
+        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED);
+        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS);
+        //将查出的数据封装到OrderStatisticsVO
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        orderStatisticsVO.setToBeConfirmed(toBeConfirmed);
+        orderStatisticsVO.setConfirmed(confirmed);
+        orderStatisticsVO.setDeliveryInProgress(deliveryInProgress);
+
+
+        return orderStatisticsVO;
     }
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {
