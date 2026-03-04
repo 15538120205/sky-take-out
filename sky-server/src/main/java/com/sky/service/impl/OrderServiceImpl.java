@@ -6,10 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.xiaoymin.knife4j.core.util.CollectionUtils;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersConfirmDTO;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -331,6 +328,24 @@ public class OrderServiceImpl implements OrderService {
                 .status(Orders.CONFIRMED)
                 .packAmount(6).tablewareNumber(1).build();
         orderMapper.update(orders);
+    }
+    /**
+     * 拒单
+     * @param ordersRejectionDTO
+     */
+    @Override
+    public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
+        Orders orders = orderMapper.getById(ordersRejectionDTO.getId());
+        //订单只有存在且状态为待接单时可以拒单
+        if (orders == null || orders.getStatus() != Orders.TO_BE_CONFIRMED) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders order= new Orders();
+        order.setId(orders.getId());
+        order.setStatus(Orders.CANCELLED);
+        order.setRejectionReason(ordersRejectionDTO.getRejectionReason());
+        order.setCancelTime(LocalDateTime.now());
+        orderMapper.update(order);
     }
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {
