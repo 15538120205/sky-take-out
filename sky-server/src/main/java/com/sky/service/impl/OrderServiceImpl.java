@@ -193,19 +193,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 订单详情
-     *
+     * 查询订单详情
      * @param id
      * @return
      */
     @Override
     public OrderVO details(Long id) {
-        //根据id查询订单
+//        根据id查询订单
         Orders orders = orderMapper.getById(id);
-        //查询该订单对应的菜品/套餐明细
-        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orders.getId());
+
+//        查询该订单对应的菜品/套餐明细
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+//        将订单及其详情封装到OrderVo并返回
         OrderVO orderVO = new OrderVO();
-        BeanUtils.copyProperties(orders,orderVO);
+        BeanUtils.copyProperties(orders, orderVO);
         orderVO.setOrderDetailList(orderDetailList);
 
         return orderVO;
