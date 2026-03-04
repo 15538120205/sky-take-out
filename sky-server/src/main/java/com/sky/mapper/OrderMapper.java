@@ -64,4 +64,11 @@ public interface OrderMapper {
      * @return
      */
     Double sumByMap(Map map);
+
+    /**
+     * 根据动态条件查询用户数量
+     * @param map
+     * @return
+     */
+    Integer countByMap(Map map);
 }
