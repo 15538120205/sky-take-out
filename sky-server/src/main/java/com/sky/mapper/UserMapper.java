@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Mapper
 public interface UserMapper {
@@ -37,4 +38,6 @@ public interface UserMapper {
      * @param map
      */
     Integer getUser(HashMap<String, Object> map);
+
+    Integer countByMap(Map map);
 }

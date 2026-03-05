@@ -33,4 +33,5 @@
             </if>
         </where>
     </select>
+    <select id="getUser" resultType="java.lang.Integer"></select>
 </mapper>
